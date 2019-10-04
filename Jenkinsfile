@@ -8,7 +8,7 @@ node {
   def VERSION     = "0.0.1.BUILD-SNAPSHOT"
   
   // Sonar configuration attributes
-  def SONAR_TOKEN = "0af30a17a1f3987a83773a9096ef1306957b5bd5"
+  def SONAR_TOKEN = "a10b3cc2b6306878395145115ad5af3cef2ccd0d"
   def SONAR_URL = "http://cloudnativelab-sonar-alb-1809467691.us-east-1.elb.amazonaws.com"
 
   // AWS S3 Bucket 
@@ -52,7 +52,6 @@ node {
     //       sh("ng lint")
     //     }
     //   }
-
       stage('Build') {
         milestone()
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
@@ -65,10 +64,17 @@ node {
         archive 'dist.tar.gz'
       }
 
-      stage('Deploy') {
-        milestone()
-        echo "Deploying..."
-      }      
+      stage('Upload') {
+        dir("workspace/${env.JOB_NAME}/${env.BRANCH_NAME}"){
+          pwd(); //Log current directory
+          withAWS(region:'us-east-1',credentials:'aws_id') {
+            def identity=awsIdentity();//Log AWS credentials
+            // Upload files from working directory 'dist' in your project workspace
+            s3Upload(bucket:"s3.cloudfront.simple.bucket", workingDir:'dist', includePathPattern:'**/*');
+          }
+        };
+      }
+      
     } catch(e) {
       println "Err: Incremental Build failed with Error: " + e.toString()
       currentBuild.result = 'FAILED'
