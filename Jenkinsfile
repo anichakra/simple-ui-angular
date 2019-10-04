@@ -30,7 +30,7 @@ node {
       }
 
       stage('NPM Install') {
-        angularCli = docker.build("angular-cli", "./docker")
+        angularCli = docker.build("angular-cli", ".")
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
            withEnv(["NPM_CONFIG_LOGLEVEL=warn"]) {
              sh("npm install")
