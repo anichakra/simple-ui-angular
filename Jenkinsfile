@@ -22,7 +22,7 @@ node {
   ws("workspace/${env.JOB_NAME}/${env.BRANCH_NAME}") {
     try {      
             
-      def angularCli = docker.build("angular-cli", ".")
+      def angularCli = docker.build("angular-cli", "./docker")
       println "Pipeline started in workspace/" + env.JOB_NAME + "/" + env.BRANCH_NAME
       
       stage('SCM Checkout') {
