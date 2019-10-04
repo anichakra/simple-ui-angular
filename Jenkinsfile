@@ -66,13 +66,17 @@ node {
 
       stage('Upload') {
         def awsCli = docker.build("aws-cli", "./aws")
-        pwd(); //Log current directory
-
         awsCli.inside("-v $HOME/.aws:/root/.aws") {
-          withAWS(region:'us-east-1',credentials:'aws_id') {
-          // Upload files from working directory 'dist' in your project workspace
-            s3Upload(bucket:"s3.cloudfront.simple.bucket", workingDir:'dist', includePathPattern:'**/*');
-          }
+          withCredentials(
+            [[
+              $class: 'AmazonWebServicesCredentialsBinding',
+              accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+              credentialsId: AWS_CREDENTIAL_ID,  
+              secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+            ]]) {
+            
+            sh("aws s3 cp /dist/ s3://s3.cloudfront.simple.bucket/ --recursive")
+            }
         }
       }
       
