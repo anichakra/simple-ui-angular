@@ -21,16 +21,16 @@ node {
       
   ws("workspace/${env.JOB_NAME}/${env.BRANCH_NAME}") {
     try {      
-            
-      def angularCli = docker.build("angular-cli", "./docker")
       println "Pipeline started in workspace/" + env.JOB_NAME + "/" + env.BRANCH_NAME
-      
+      def angularCli
+
       stage('SCM Checkout') {
         println "########## Checking out latest from git repo ##########"
         checkout scm
       }
 
       stage('NPM Install') {
+        angularCli = docker.build("angular-cli", "./docker")
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
            withEnv(["NPM_CONFIG_LOGLEVEL=warn"]) {
              sh("npm install")
