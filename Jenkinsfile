@@ -75,7 +75,7 @@ node {
               secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
             ]]) {
             
-            sh("aws s3 cp /dist/ s3://s3.cloudfront.simple.bucket/ --recursive")
+            sh("aws s3 cp dist/ s3://s3.cloudfront.simple.bucket/ --recursive")
             }
         }
       }
