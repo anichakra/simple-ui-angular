@@ -65,18 +65,17 @@ node {
       }
 
       stage('Upload') {
-        dir("workspace/${env.JOB_NAME}/${env.BRANCH_NAME}"){
-          def awsCli = docker.build("aws-cli", "./aws")
-          awsCli.inside("-v $HOME/.aws:/root/.aws") {
-          pwd(); //Log current directory
+        def awsCli = docker.build("aws-cli", "./aws")
+        pwd(); //Log current directory
+
+        awsCli.inside("-v $HOME/.aws:/root/.aws") {
           withAWS(region:'us-east-1',credentials:'aws_id') {
-            def identity=awsIdentity();//Log AWS credentials
-            // Upload files from working directory 'dist' in your project workspace
+          // Upload files from working directory 'dist' in your project workspace
             s3Upload(bucket:"s3.cloudfront.simple.bucket", workingDir:'dist', includePathPattern:'**/*');
           }
         }
       }
-      }
+      
       
     } catch(e) {
       println "Err: Incremental Build failed with Error: " + e.toString()
