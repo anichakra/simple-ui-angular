@@ -1,58 +1,86 @@
 #!groovy
+// Pipeline as code using Jenkinsfile for a angular app
+// @author Anirban Chakraborty
 
-properties(
-    [
-        [$class: 'BuildDiscarderProperty', strategy:
-          [$class: 'LogRotator', artifactDaysToKeepStr: '14', artifactNumToKeepStr: '5', daysToKeepStr: '30', numToKeepStr: '60']],
-        pipelineTriggers(
-          [
-              pollSCM('H/15 * * * *'),
-              cron('@daily'),
-          ]
-        )
-    ]
-)
 node {
-    stage('Checkout') {
-        //disable to recycle workspace data to save time/bandwidth
-        deleteDir()
+  // Maven Artifact Id and Version
+  def ARTIFACT_ID = "simple-ui-angular"
+  def VERSION     = "0.0.1.BUILD-SNAPSHOT"
+  
+  // Sonar configuration attributes
+  def SONAR_TOKEN = "0af30a17a1f3987a83773a9096ef1306957b5bd5"
+  def SONAR_URL = "http://cloudnativelab-sonar-alb-1809467691.us-east-1.elb.amazonaws.com"
+
+  // AWS S3 Bucket 
+  def AWS_S3_BUCKET  = "s3.simple.bucket"
+  // AWS attributes - might not be required to be changed often   
+  def AWS_REGION  = "us-east-1"
+  def AWS_ACCOUNT = "595233065713" 
+// ID of credentials in Jenkins as configured in Jenkins project
+  def AWS_CREDENTIAL_ID = "aws_id"  
+      
+  ws("workspace/${env.JOB_NAME}/${env.BRANCH_NAME}") {
+    try {      
+            
+      def angularCli = docker.build("angular-cli")
+      println "Pipeline started in workspace/" + env.JOB_NAME + "/" + env.BRANCH_NAME
+      
+      stage('SCM Checkout') {
+        println "########## Checking out latest from git repo ##########"
         checkout scm
+      }
 
-        //enable for commit id in build number
-        //env.git_commit_id = sh returnStdout: true, script: 'git rev-parse HEAD'
-        //env.git_commit_id_short = env.git_commit_id.take(7)
-        //currentBuild.displayName = "#${currentBuild.number}-${env.git_commit_id_short}"
-    }
-
-    stage('NPM Install') {
-        withEnv(["NPM_CONFIG_LOGLEVEL=warn"]) {
-            sh 'npm install'
+      stage('NPM Install') {
+        angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
+           withEnv(["NPM_CONFIG_LOGLEVEL=warn"]) {
+             sh("npm install")
+           }
         }
-    }
-
-    stage('Test') {
-        withEnv(["CHROME_BIN=/usr/bin/chromium-browser"]) {
-          sh 'ng test --progress=false --watch false'
+      }
+  
+      stage('Unit Test') {
+        angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
+          withEnv(["CHROME_BIN=/usr/bin/chromium-browser"]) {
+            sh("ng test --progress=false --watch false")
+          }
         }
         junit '**/test-results.xml'
-    }
+      }
+      
+      stage('Lint') {
+        angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
+          sh("ng lint")
+        }
+      }
 
-    stage('Lint') {
-        sh 'ng lint'
-    }
-
-    stage('Build') {
+      stage('Build') {
         milestone()
-        sh 'ng build --prod --aot --sm --progress=false'
-    }
+        angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
+          sh("ng build --prod --aot --sm --progress=false")
+        }
+      }
 
-    stage('Archive') {
+      stage('Archive') {
         sh 'tar -cvzf dist.tar.gz --strip-components=1 dist'
         archive 'dist.tar.gz'
-    }
+      }
 
-    stage('Deploy') {
+      stage('Deploy') {
         milestone()
         echo "Deploying..."
+      }      
+    } catch(e) {
+      println "Err: Incremental Build failed with Error: " + e.toString()
+      currentBuild.result = 'FAILED'
+      throw e
+    } finally  {
+      stage('Cleanup') {
+        println "Cleaning up"
+        sh("docker image rm " + ARTIFACT_ID + ":" + VERSION)
+        deleteDir()
+      }          
     }
+  }
 }
+
+
