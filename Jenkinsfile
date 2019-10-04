@@ -76,7 +76,6 @@ node {
     } finally  {
       stage('Cleanup') {
         println "Cleaning up"
-        sh("docker image rm " + ARTIFACT_ID + ":" + VERSION)
         deleteDir()
       }          
     }
