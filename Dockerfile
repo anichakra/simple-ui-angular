@@ -1,5 +1,5 @@
 # base image
-FROM node:12.2.0
+FROM node:12.11.0
 
 # install chrome for protractor tests
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -yq google-chrome-stable
 
 # set working directory
 WORKDIR /app
+
 
 # add `/app/node_modules/.bin` to $PATH
 ENV PATH /app/node_modules/.bin:$PATH
