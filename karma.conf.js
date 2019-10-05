@@ -29,7 +29,7 @@ module.exports = function (config) {
       reports: [ 'html', 'lcovonly' ],
       fixWebpackSourcePaths: true
     },
-    browsers : ['ChromeHeadlessCustom'],
+    browsers: ['Chrome', 'ChromeHeadless', 'ChromeHeadlessNoSandbox'],
 customLaunchers: {
   ChromeHeadlessCustom: {
     base: 'ChromeHeadless',
