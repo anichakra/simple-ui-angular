@@ -50,5 +50,9 @@
   "engines": {
     "node": "6.9.2",
     "npm": "3.10.9"
-  }
+  },
+  "plugins" : [
+    "karma-chrome-launcher",
+    "karma-jasmine"
+  ] 
 }

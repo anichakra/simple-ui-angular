@@ -36,6 +36,13 @@ customLaunchers: {
     flags: ['--no-sandbox']
   }
 },
+frameworks: [
+  'jasmine',
+],
+plugins : [
+  'karma-chrome-launcher',
+  'karma-jasmine',
+],
     angularCli: {
       environment: 'dev'
     },
