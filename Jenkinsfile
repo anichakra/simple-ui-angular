@@ -58,11 +58,6 @@ node {
         }
       }
 
-      stage('Archive') {
-        sh 'tar -cvzf dist.tar.gz --strip-components=1 dist'
-        archive 'dist.tar.gz'
-      }
-
       stage('Upload') {
         def awsCli = docker.build("aws-cli", "./aws")
         awsCli.inside("-v $HOME/.aws:/root/.aws") {
