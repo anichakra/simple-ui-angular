@@ -2,9 +2,20 @@
 FROM node:12.11.0
 
 # install chrome for protractor tests
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-RUN apt-get update && apt-get install -yq google-chrome-stable
+#RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+#RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+#RUN apt-get update && apt-get install -yq google-chrome-stable
+
+# Installs latest Chromium package
+RUN apk update && apk upgrade && \
+    echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
+    echo @edge http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories && \
+    apk add --no-cache bash chromium@edge nss@edge
+
+# This line is to tell karma-chrome-launcher where
+# chromium was downloaded and installed to.
+ENV CHROME_BIN /usr/bin/chromium-browser
+
 
 # set working directory
 WORKDIR /app
