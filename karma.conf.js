@@ -29,17 +29,13 @@ module.exports = function (config) {
       reports: [ 'html', 'lcovonly' ],
       fixWebpackSourcePaths: true
     },
-    customLaunchers: {
-      ChromeHeadless: {
-        base: 'Chrome',
-        flags: [
-          '--headless',
-          '--disable-gpu',
-          // Without a remote debugging port, Google Chrome exits immediately.
-          '--remote-debugging-port=9222',
-        ],
-      }
-    },
+    browsers : ['ChromeHeadlessCustom'],
+customLaunchers: {
+  ChromeHeadlessCustom: {
+    base: 'ChromeHeadless',
+    flags: ['--no-sandbox']
+  }
+},
     angularCli: {
       environment: 'dev'
     },
