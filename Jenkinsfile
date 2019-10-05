@@ -32,7 +32,7 @@ node {
       stage('NPM Install') {
         angularCli = docker.build("angular-cli", ".")
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules -p 9876:9876 -p 4200:4200") {
-           withEnv(["NPM_CONFIG_LOGLEVEL=warn", "CHROME_BIN=/usr/bin/chromium-browser"]) {
+           withEnv(["NPM_CONFIG_LOGLEVEL=warn", "CHROME_BIN=/usr/bin/google-chrome"]) {
              sh("npm install")
              sh("ng test --progress=false --watch=false --code-coverage")
            }
