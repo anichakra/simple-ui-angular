@@ -38,20 +38,25 @@ node {
         }
       }
   
-    //   stage('Unit Test') {
-    //     angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
-    //       withEnv(["CHROME_BIN=/usr/bin/chromium-browser"]) {
-    //         sh("ng test --progress=false --watch false")
-    //       }
-    //     }
-    //     junit '**/test-results.xml'
-    //   }
+       stage('Unit Test') {
+        angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
+             sh("ng test --watch=false --code-coverage")
+           
+         }
+      }
+
+      stage('Sonar') {
+        angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
+             sh("npm install sonar-scanner")
+             sh("npm run sonar") 
+         }
+      }
       
-    //   stage('Lint') {
-    //     angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
-    //       sh("ng lint")
-    //     }
-    //   }
+       stage('Lint') {
+         angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
+           sh("ng lint")
+        }
+       }
       stage('Build') {
         milestone()
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {

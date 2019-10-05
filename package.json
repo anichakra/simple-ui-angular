@@ -3,6 +3,15 @@
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e",
+    "sonar": "sonar-scanner"
+  },
   "dependencies": {
     "@angular/cli": "^1.1.3",
     "@angular/common": "^4.0.0",
@@ -33,6 +42,7 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "karma-junit-reporter": "^1.2.0",
     "protractor": "~5.1.0",
+    "sonar-scanner": "^3.1.0",
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
     "typescript": "~2.2.0"
