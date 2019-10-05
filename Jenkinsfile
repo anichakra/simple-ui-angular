@@ -34,15 +34,9 @@ node {
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
            withEnv(["NPM_CONFIG_LOGLEVEL=warn"]) {
              sh("npm install")
+             sh("ng test --watch=false --code-coverage")
            }
         }
-      }
-  
-       stage('Unit Test') {
-        angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
-             sh("ng test --watch=false --code-coverage")
-           
-         }
       }
 
       stage('Sonar') {
