@@ -14,6 +14,12 @@ ENV CHROME_BIN /usr/bin/chromium-browser
 # set working directory
 WORKDIR /app
 
+# Install OpenJDK 8
+RUN echo 'deb http://deb.debian.org/debian jessie-backports main' > /etc/apt/sources.list.d/jessie-backports.list && \
+     apt-get update && \
+     apt-get install -y -t jessie-backports openjdk-8-jre-headless ca-certificates-java
+
+
 
 # add `/app/node_modules/.bin` to $PATH
 ENV PATH /app/node_modules/.bin:$PATH
@@ -22,11 +28,5 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json /app/package.json
 RUN npm install
 RUN npm install -g @angular/cli
-
-# Install OpenJDK 8
-RUN echo 'deb http://deb.debian.org/debian jessie-backports main' > /etc/apt/sources.list.d/jessie-backports.list && \
-     apt-get update && \
-     apt-get install -y -t jessie-backports openjdk-8-jre-headless ca-certificates-java
-
 
 
