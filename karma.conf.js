@@ -43,9 +43,7 @@ plugins : [
   'karma-chrome-launcher',
   'karma-jasmine',
 ],
-    angularCli: {
-      environment: 'dev'
-    },
+   
     reporters: config.angularCli && config.angularCli.codeCoverage
               ? ['progress', 'coverage-istanbul', 'dots', 'junit']
               : ['progress', 'kjhtml', 'dots', 'junit'],
