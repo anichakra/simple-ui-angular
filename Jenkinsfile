@@ -43,7 +43,7 @@ node {
       stage('Sonar') {
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
              sh("npm install sonar-scanner")
-             sh("npm run sonar") 
+             sh("sudo npm run sonar") 
          }
       }
       
