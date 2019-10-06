@@ -33,14 +33,15 @@ node {
         angularCli = docker.build("angular-cli", ".")
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules -p 9876:9876 -p 4200:4200") {
            withEnv(["NPM_CONFIG_LOGLEVEL=warn", "CHROME_BIN=/usr/bin/chromium-browser"]) {
-             sh("npm install")
-              sh("npm install -g @angular/cli")
+            // sh("npm install")
+              //sh("npm install -g @angular/cli")
 
            //  sh("npm install @angular/cli")
            //  sh("ng test --progress=false --watch=false --code-coverage")
            }
         }
       }
+      
       stage('Sonar') {
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
            //  sh("npm install sonar-scanner")
