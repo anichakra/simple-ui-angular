@@ -33,7 +33,8 @@ node {
         angularCli = docker.build("angular-cli", ".")
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules -p 9876:9876 -p 4200:4200") {
            withEnv(["NPM_CONFIG_LOGLEVEL=warn", "CHROME_BIN=/usr/bin/chromium-browser"]) {
-          //   sh("npm install")
+             sh("npm install")
+              sh("npm install -g @angular/cli")
                           sh("npm run sonar") 
 
            //  sh("npm install @angular/cli")
