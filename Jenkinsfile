@@ -34,8 +34,7 @@ node {
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules -p 9876:9876 -p 4200:4200") {
            withEnv(["NPM_CONFIG_LOGLEVEL=warn", "CHROME_BIN=/usr/bin/chromium-browser"]) {
              sh("npm install")
-              sh("npm install -g @angular/cli")
-                          sh("npm run sonar") 
+              //sh("npm install -g @angular/cli")
 
            //  sh("npm install @angular/cli")
            //  sh("ng test --progress=false --watch=false --code-coverage")
@@ -45,16 +44,11 @@ node {
       stage('Sonar') {
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
            //  sh("npm install sonar-scanner")
-             sh("chmod 777 /var/jenkins_home/workspace/simple-ui-angular/master/master/node_modules/sonar-scanner/bin/sonar-scanner")
+                          sh("npm run sonar") 
            //  sh("npm run sonar") 
          }
       }
-      
-       stage('Lint') {
-         angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
-           sh("ng lint")
-        }
-       }
+    
       stage('Build') {
         milestone()
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
