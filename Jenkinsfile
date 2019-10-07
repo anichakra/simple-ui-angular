@@ -62,7 +62,7 @@ node {
           sh("npm install karma-jasmine-html-reporter --save-dev")
 
              sh("npm install karma-junit-reporter")
-          sh("ng run test --code-coverage --watch=false --browsers ChromeHeadlessCI")
+          sh("ng test --progress=false --watch=false --code-coverage")
           sh("ng build --prod --aot --sm --progress=false")
         }
       }
