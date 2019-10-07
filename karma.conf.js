@@ -36,7 +36,7 @@ customLaunchers: {
   }
 },
 frameworks: [
-  'jasmine',
+  'jasmine','@angular/cli'
 ],
 plugins : [
   'karma-chrome-launcher',
