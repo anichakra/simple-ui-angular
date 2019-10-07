@@ -30,7 +30,11 @@ node {
       }
 
       stage('NPM Install') {
+        def angularCli = docker.image("angular-cli")
+        if(!angularCli) {
+          println "Creating angular-cli image"
         angularCli = docker.build("angular-cli", ".")
+        }
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules -p 9876:9876 -p 4200:4200") {
            withEnv(["NPM_CONFIG_LOGLEVEL=warn", "CHROME_BIN=/usr/bin/chromium-browser"]) {
             // sh("npm install")
@@ -53,6 +57,8 @@ node {
         milestone()
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
           sh("npm install")
+                  sh("npm install -g @angular/cli")
+
           sh("npm install karma-jasmine-html-reporter --save-dev")
 
           sh("ng test --progress=false --watch=false --code-coverage")
