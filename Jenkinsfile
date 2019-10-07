@@ -22,7 +22,7 @@ node {
   ws("workspace/${env.JOB_NAME}/${env.BRANCH_NAME}") {
     try {      
       println "Pipeline started in workspace/" + env.JOB_NAME + "/" + env.BRANCH_NAME
-      def angularCli
+      def angularCli = docker.image("angular-cli")
 
       stage('SCM Checkout') {
         println "########## Checking out latest from git repo ##########"
@@ -30,7 +30,7 @@ node {
       }
 
       stage('NPM Install') {
-        def angularCli = docker.image("angular-cli")
+         
         if(!angularCli) {
           println "Creating angular-cli image"
         angularCli = docker.build("angular-cli", ".")
