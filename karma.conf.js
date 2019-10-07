@@ -9,7 +9,6 @@ module.exports = function (config) {
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
-      require('karma-junit-reporter'),
       require('@angular/cli/plugins/karma')
     ],
     client:{
@@ -18,9 +17,7 @@ module.exports = function (config) {
     files: [
       { pattern: './src/test.ts', watched: false }
     ],
-    preprocessors: {
-      './src/test.ts': ['@angular/cli']
-    },
+  
     mime: {
       'text/x-typescript': ['ts','tsx']
     },
@@ -36,23 +33,21 @@ customLaunchers: {
   }
 },
 frameworks: [
-  'jasmine','@angular/cli'
+  'jasmine'
 ],
 plugins : [
   'karma-chrome-launcher',
   'karma-jasmine'],
    
     reporters: config.angularCli && config.angularCli.codeCoverage
-              ? ['progress', 'dots', 'junit']
-              : ['progress', 'kjhtml', 'dots', 'junit'],  
+              ? ['progress', 'dots']
+              : ['progress', 'kjhtml', 'dots'],  
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['Chrome'],
-    junitReporter: {
-      outputFile: 'test-results.xml'
-    },
+   
     singleRun: false
   });
   
