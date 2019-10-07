@@ -53,6 +53,8 @@ node {
         milestone()
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
           sh("npm install")
+          sh("npm install karma-jasmine-html-reporter --save-dev")
+
           sh("ng test --progress=false --watch=false --code-coverage")
           sh("ng build --prod --aot --sm --progress=false")
         }
