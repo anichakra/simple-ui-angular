@@ -62,6 +62,8 @@ node {
           sh("npm install karma-jasmine-html-reporter --save-dev")
 
              sh("npm install karma-junit-reporter")
+             sh("npm install puppeteer --save-dev")
+
           sh("ng test --progress=false --watch=false --code-coverage")
           sh("ng build --prod --aot --sm --progress=false")
         }
