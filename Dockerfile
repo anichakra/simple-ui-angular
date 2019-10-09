@@ -9,10 +9,6 @@ RUN apk add --update chromium
 
 ENV CHROME_BIN=/usr/bin/chromium-browser
 ENV CHROME_PATH=/usr/lib/chromium/
-
-
-
-
 # set working directory
 WORKDIR /app
 # install Java
