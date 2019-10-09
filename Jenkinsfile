@@ -27,13 +27,13 @@ node {
       def angularCliVolume = "-v ${PWD}:/app -v /app/node_modules -p 9876:9876 -p 4200:4200"
 
       stage('SCM Checkout') {
-        angularCli = docker.build("angular-cli", ".")
         println "########## Checking out latest from git repo ##########"
         checkout scm
       }
     
       stage('Test') {
         milestone()
+        angularCli = docker.build("angular-cli", ".")
         angularCli.inside(angularCliVolume) {
           withEnv(["NPM_CONFIG_LOGLEVEL=warn", "CHROME_BIN=/usr/bin/chromium-browser"]) {
             sh("npm install")
