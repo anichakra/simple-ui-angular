@@ -36,7 +36,7 @@ node {
         angularCli = docker.build("angular-cli", ".")
         angularCli.inside(angularCliVolume) {
           withEnv(["NPM_CONFIG_LOGLEVEL=warn", "CHROME_BIN=/usr/bin/chromium-browser"]) {
-            //sh("npm install")
+            sh("npm install")
             //sh("npm install -g @angular/cli")
 
             //sh("npm install karma-jasmine-html-reporter --save-dev")
@@ -55,6 +55,7 @@ node {
           sh("ng build --prod --aot --sm --progress=false")
         }
       }
+
 
       stage('Sonar') {
         angularCli.inside(angularCliVolume) {
