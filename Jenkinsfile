@@ -23,41 +23,18 @@ node {
     try {      
       println "Pipeline started in workspace/" + env.JOB_NAME + "/" + env.BRANCH_NAME
       
-      def angularCli
+      def angularCli = docker.build("angular-cli", ".")
+      def angularCliVolume = '-v ${PWD}:/app -v /app/node_modules -p 9876:9876 -p 4200:4200'
+      
       stage('SCM Checkout') {
         println "########## Checking out latest from git repo ##########"
         checkout scm
       }
-
-      stage('NPM Install') {
-         
-      //  if(!angularCli) {
-       //   println "Creating angular-cli image"
-       // angularCli = docker.build("angular-cli", ".")
-       // }
-        angularCli = docker.build("angular-cli", ".")
-
-        angularCli.inside("-v ${PWD}:/app -v /app/node_modules -p 9876:9876 -p 4200:4200") {
-           withEnv(["NPM_CONFIG_LOGLEVEL=warn", "CHROME_BIN=/usr/bin/chromium-browser"]) {
-            // sh("npm install")
-              //sh("npm install -g @angular/cli")
-
-           //  sh("npm install @angular/cli")
-           //  sh("ng test --progress=false --watch=false --code-coverage")
-           }
-        }
-      }
-      stage('Sonar') {
-        angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
-           //  sh("npm install sonar-scanner")
-                          sh("npm run sonar") 
-           //  sh("npm run sonar") 
-         }
-      }
     
-      stage('Build') {
+      stage('Test') {
         milestone()
-        angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
+        angularCli.inside() {
+        withEnv(["NPM_CONFIG_LOGLEVEL=warn", "CHROME_BIN=/usr/bin/chromium-browser"]) {
           sh("npm install")
           sh("npm install -g @angular/cli")
 
@@ -67,8 +44,22 @@ node {
              sh("npm install puppeteer --save-dev")
 
        //   sh("ng test --progress=false --watch=false --code-coverage")
+           }
+        }
+      }
+
+      stage('Build') {
+        milestone()
+        angularCli.inside(angularCliVolume) {
           sh("ng build --prod --aot --sm --progress=false")
         }
+      }
+
+      stage('Sonar') {
+        angularCli.inside(angularCliVolume) {
+          sh("npm install sonar-scanner")
+          sh("npm run sonar") 
+         }
       }
 
       stage('Upload') {
