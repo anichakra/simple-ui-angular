@@ -17,7 +17,7 @@ node {
   def AWS_REGION  = "us-east-1"
   def AWS_ACCOUNT = "595233065713" 
 // ID of credentials in Jenkins as configured in Jenkins project
-  def AWS_CREDENTIAL_ID = "aws_id"  
+  def AWS_CREDENTIAL_ID = "aws_id"
 
   ws("workspace/${env.JOB_NAME}/${env.BRANCH_NAME}") {
     try {      
@@ -33,7 +33,7 @@ node {
     
       stage('Test') {
         milestone()
-        angularCli.inside() {
+        angularCli.inside(angularCliVolume) {
         withEnv(["NPM_CONFIG_LOGLEVEL=warn", "CHROME_BIN=/usr/bin/chromium-browser"]) {
           sh("npm install")
           sh("npm install -g @angular/cli")
