@@ -36,15 +36,15 @@ node {
         angularCli = docker.build("angular-cli", ".")
         angularCli.inside(angularCliVolume) {
           withEnv(["NPM_CONFIG_LOGLEVEL=warn", "CHROME_BIN=/usr/bin/chromium-browser"]) {
-            sh("npm install")
-            sh("npm install -g @angular/cli")
+            //sh("npm install")
+            //sh("npm install -g @angular/cli")
 
-            sh("npm install karma-jasmine-html-reporter --save-dev")
+            //sh("npm install karma-jasmine-html-reporter --save-dev")
 
-            sh("npm install karma-junit-reporter --save-dev")
-            sh("npm install puppeteer --save-dev")
+            //sh("npm install karma-junit-reporter --save-dev")
+            //sh("npm install puppeteer --save-dev")
 
-          sh("ng test")
+            //sh("ng test")
            }
         }
       }
