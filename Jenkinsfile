@@ -23,10 +23,11 @@ node {
     try {      
       println "Pipeline started in workspace/" + env.JOB_NAME + "/" + env.BRANCH_NAME
       
-      def angularCli = docker.build("angular-cli", ".")
+      def angularCli
       def angularCliVolume = '-v ${PWD}:/app -v /app/node_modules -p 9876:9876 -p 4200:4200'
-      
+
       stage('SCM Checkout') {
+        angularCli = docker.build("angular-cli", ".")
         println "########## Checking out latest from git repo ##########"
         checkout scm
       }
