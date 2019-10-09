@@ -18,13 +18,12 @@ node {
   def AWS_ACCOUNT = "595233065713" 
 // ID of credentials in Jenkins as configured in Jenkins project
   def AWS_CREDENTIAL_ID = "aws_id"  
-  def angularCli = docker.build("angular-cli", ".")
-  
+
   ws("workspace/${env.JOB_NAME}/${env.BRANCH_NAME}") {
     try {      
       println "Pipeline started in workspace/" + env.JOB_NAME + "/" + env.BRANCH_NAME
       
-
+      def angularCli
       stage('SCM Checkout') {
         println "########## Checking out latest from git repo ##########"
         checkout scm
@@ -36,6 +35,8 @@ node {
        //   println "Creating angular-cli image"
        // angularCli = docker.build("angular-cli", ".")
        // }
+        angularCli = docker.build("angular-cli", ".")
+
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules -p 9876:9876 -p 4200:4200") {
            withEnv(["NPM_CONFIG_LOGLEVEL=warn", "CHROME_BIN=/usr/bin/chromium-browser"]) {
             // sh("npm install")
@@ -58,7 +59,7 @@ node {
         milestone()
         angularCli.inside("-v ${PWD}:/app -v /app/node_modules") {
           sh("npm install")
-                  sh("npm install -g @angular/cli")
+          sh("npm install -g @angular/cli")
 
           sh("npm install karma-jasmine-html-reporter --save-dev")
 
