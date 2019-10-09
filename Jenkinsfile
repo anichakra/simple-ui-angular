@@ -24,7 +24,7 @@ node {
       println "Pipeline started in workspace/" + env.JOB_NAME + "/" + env.BRANCH_NAME
       
       def angularCli
-      def angularCliVolume = '-v ${PWD}:/app -v /app/node_modules -p 9876:9876 -p 4200:4200'
+      def angularCliVolume = "-v ${PWD}:/app -v /app/node_modules -p 9876:9876 -p 4200:4200"
 
       stage('SCM Checkout') {
         angularCli = docker.build("angular-cli", ".")
@@ -35,14 +35,14 @@ node {
       stage('Test') {
         milestone()
         angularCli.inside(angularCliVolume) {
-        withEnv(["NPM_CONFIG_LOGLEVEL=warn", "CHROME_BIN=/usr/bin/chromium-browser"]) {
-          sh("npm install")
-          sh("npm install -g @angular/cli")
+          withEnv(["NPM_CONFIG_LOGLEVEL=warn", "CHROME_BIN=/usr/bin/chromium-browser"]) {
+            sh("npm install")
+            sh("npm install -g @angular/cli")
 
-          sh("npm install karma-jasmine-html-reporter --save-dev")
+            sh("npm install karma-jasmine-html-reporter --save-dev")
 
-             sh("npm install karma-junit-reporter")
-             sh("npm install puppeteer --save-dev")
+            sh("npm install karma-junit-reporter")
+            sh("npm install puppeteer --save-dev")
 
        //   sh("ng test --progress=false --watch=false --code-coverage")
            }
