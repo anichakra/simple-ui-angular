@@ -13,7 +13,7 @@
     "sonar": "sonar-scanner"
   },
   "dependencies": {
-    "@angular/cli": "^1.1.3",
+    "@angular/cli": "^6.0.0",
     "@angular/common": "^4.0.0",
     "@angular/compiler": "^4.0.0",
     "@angular/compiler-cli": "^4.4.7",
@@ -24,7 +24,7 @@
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
     "core-js": "^2.4.1",
-    "express": "^4.15.2",
+    "express": "^4.21.1",
     "rxjs": "^5.1.0",
     "zone.js": "^0.8.4"
   },
