@@ -13,8 +13,8 @@
     "sonar": "sonar-scanner"
   },
   "dependencies": {
-    "@angular/cli": "^1.1.3",
-    "@angular/common": "^4.0.0",
+    "@angular/cli": "^6.0.0",
+    "@angular/common": "^19.2.16",
     "@angular/compiler": "^4.0.0",
     "@angular/compiler-cli": "^4.4.7",
     "@angular/core": "^4.0.0",
